@@ -1,0 +1,66 @@
+@font-face {
+  font-family: Gilbert;
+  src: url(gilbert.otf);
+}
+
+canvas {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+  z-index: -1;
+}
+
+#content {
+  font-family: Gilbert;
+  color: antiquewhite;
+  text-align: center;
+  z-index: 0;
+  margin: auto;
+}
+
+.glow {
+  transition-delay: 4000ms;
+  margin-top: 0;
+  font-size: 15.75vh;
+  letter-spacing: 2.1vh;
+  -webkit-background-clip: text;
+  -webkit-animation: glow 1s ease-in-out infinite alternate;
+  -moz-animation: glow 1s ease-in-out infinite alternate;
+  animation: glow 1s ease-in-out infinite alternate;
+}
+
+/* https://www.w3schools.com/howto/howto_css_glowing_text.asp */
+@-webkit-keyframes glow {
+  from {
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073, 0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
+  }
+  to {
+    text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6, 0 0 70px #ff4da6, 0 0 80px #ff4da6;
+  }
+}
+
+h1 {
+  font-size: 10.5vh;
+}
+
+h2 {
+  font-size: 5.25vh;
+}
+
+h3 {
+  font-size: 3.675vh;
+}
+
+h4 {
+  font-size: 2.625vh;
+}
+
+footer {
+  position: fixed;
+  font-size: 1.65vh;
+  top: 0;
+  right: 10px;
+  width: fit-content;
+}
