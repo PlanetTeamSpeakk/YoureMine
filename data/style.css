@@ -3,6 +3,14 @@
   src: url(gilbert.otf);
 }
 
+a {
+  color: #E31B23;
+}
+
+a:visited {
+  color: #E60073;
+}
+
 canvas {
   position: fixed;
   right: 0;
