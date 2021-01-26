@@ -104,10 +104,26 @@ function setup() {
   camera.fov = 2 * Math.atan(3 / (2 * camera.position.z)) * (180 / Math.PI);
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
-  width = Math.tan(camera.fov/2 * (Math.PI / 180)) * (camera.position.z + 2) * camera.aspect * 2;
-  height = width / camera.aspect;
+  width = calcWidth(-2);
+  height = calcHeight(-2);
 }
 setup();
+
+function calcWidth(zPos) {
+  // tan(α) = opposite/adjacent
+  // α = fov / 2 [center is (0, 0), so two halves] * (π/180) [degrees to radians]
+  // opposite = distance from center (0, 0) to bottom of screen [what we're calculating]
+  // adjacent = distance from camera (0, 0, 5) to center at zPos (0, 0, zPos)
+  // Multiplied by camera aspect to get width from height.
+  // Multiplied by two because (0, 0) is the center.
+  return Math.tan(camera.fov/2 * (Math.PI / 180)) * (camera.position.z - zPos) * camera.aspect * 2;
+}
+
+function calcHeight(zPos) {
+  // Dividing by aspect to get the height back.
+  // Should always equal 4.2 at zPos = -2.
+  return calcWidth(zPos) / camera.aspect;
+}
 
 function invert(i, x) {
   i %= 2*x;
