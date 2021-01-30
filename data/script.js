@@ -152,12 +152,12 @@ function rotateEmojis() {
   }
 }
 
-const update = (t, premulti) => v => {
-  const waveX1 = 0.75 * Math.sin(v.x * 2 + t * 3 + v.y);
-  const waveX2 = 0.25 * Math.sin(v.x * 3 + t * 2 + v.y);
-  const waveY1 = 0.1 * Math.sin(v.y * 5 + t * 0.5 + v.x);
-  const multi = premulti || (v.x + 2.5) / 5*intensity;
-  v.z = (waveX1 + waveX2 + waveY1) * multi;
+const update = (t, premulti) => (x, y, z) => {
+  const waveX1 = 0.75 * Math.sin(x * 2 + t * 3 + y);
+  const waveX2 = 0.25 * Math.sin(x * 3 + t * 2 + y);
+  const waveY1 = 0.1 * Math.sin(y * 5 + t * 0.5 + x);
+  const multi = premulti || (x + 2.5) / 5*intensity;
+  return (waveX1 + waveX2 + waveY1) * multi;
 };
 
 var lastupdate1 = -1, lastupdate2 = -1;
@@ -169,8 +169,11 @@ function animate() {
     const t = clock.getElapsedTime();
 
     // Hearts wave
-    heartGeometry.vertices.map(update(t, 0.2));
-    heartGeometry.verticesNeedUpdate = true;
+    var pos = heartGeometry.attributes.position;
+    var up = update(t, 0.2);
+    for (var i = 0; i < pos.array.length; i += 3)
+      pos.array[i+2] = up(pos.array[i], pos.array[i+1], pos.array[i+2]);
+    pos.needsUpdate = true;
 
     // Small background hearts creation
     if (t - lastSH >= 20/width*0.1) {
@@ -194,12 +197,12 @@ function animate() {
         var max = 0;
         const midY = (0.075*-1.9) / 2; // The highest vertice in the heart seems to be at -0.1425 which 'coincidentally' is -1.9 multiplied by the scale (0.075). Negative because it's rotated 180°, 1.9 because that's a tenth of the highest y-value used when defining the shape.
         var ti = invert((t-creationTime)%0.5, 0.25);
-        heart.geometry.vertices.map(v => {
-          v.z = Math.sin(ti - 0.125) * (v.y - midY) * 4 * speed;
-        });
+        let pos = heart.geometry.attributes.position;
+        for (var i = 0; i < pos.array.length; i += 3)
+          pos.array[i+2] = Math.sin(ti - 0.125) * (pos.array[i+1] - midY) * 4 * speed;
+        pos.needsUpdate = true;
         var x = (ti - 0.125) * 0.5 * (speed*0.5 + 0.5);
         heart.position.x += (x ** 2) * (x < 0 ? -1 : 1);
-        heart.geometry.verticesNeedUpdate = true;
       }
     });
     
